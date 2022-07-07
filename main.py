@@ -123,12 +123,11 @@ def select_document_for_hash(database_name, collection_name, result):
     healthcare_hash_value += identity_hash_value
     for i in range(0, 3):
         key_hash_value = client['key_database']['key_' + str(i)].find({'identity_hash_value': identity_hash_value})[0]['key_hash_value']
-        # print('key:', check_collision_for_hash('key_database', 'key_' + str(i), 'key_hash_value', key_hash_value))
         healthcare_hash_value += key_hash_value
 
     healthcare_hash_value = hashlib.blake2b(healthcare_hash_value.encode('utf-8'), digest_size=64).hexdigest()
     data = list(client[database_name][collection_name].find({'healthcare_hash_value': healthcare_hash_value}))
-    print('[CHBDMA] ' + "Retrieval Time:", time.time() - start_time)  # 현재시각 - 시작시간 = 실행
+    print('[CHBDMA] ' + "Retrieval Time:", time.time() - start_time)
     result.append(time.time() - start_time)
 
 def check_collision_for_hash(database_name, collection_name, type, hash_value):
